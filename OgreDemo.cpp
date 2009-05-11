@@ -10,14 +10,13 @@
 
 #include "ExampleApplication.h"
 #include <FileWatcher/FileWatcher.h>
-#include "ResourceGroupHelper.h"
 
 using namespace Ogre;
 
 // ugly globals for demo
 FW::FileWatcher* gFileWatcher = 0;
 FW::WatchID gWatchID = 0;
-ResourceGroupHelper* gHelper = 0;
+
 
 class FWTestFrameListener : public ExampleFrameListener
 {
@@ -31,41 +30,6 @@ public:
 	{
 		// update the file watcher every frame
 		gFileWatcher->update();
-
-		static float firstR = 0.0f;
-
-                        if(firstR==0.0f && mKeyboard->isKeyDown(OIS::KC_T))
-         {            
-            firstR = 1.0f;
-         
-            // name of the resource group that we want to track
-            std::string resourceGroupName = "Testing";
-
-            // to receive the error messages
-            std::string errorMessages;
-
-            // look on the hdd the last modification time and try reload changes if needed
-            //gHelper->checkTimeAndReloadIfNeeded(resourceGroupName, errorMessages);
-			//gHelper->reloadAResourceGroupWithoutDestroyingIt(resourceGroupName);
-			std::vector<ResourceGroupHelper::ArchivePathAndType> paths;
-			paths.push_back(std::make_pair("../media","FileSystem"));
-			gHelper->reloadAResourceGroup(resourceGroupName, paths);
-			gHelper->updateOnEveryRenderable();
-
-            if(errorMessages.size()>0)
-            {
-               // you can display them in a message box, or in an overlay for example
-               // here I resend them to the log...
-               Ogre::LogManager& logMgr = Ogre::LogManager::getSingleton();
-               logMgr.logMessage("****************** HERE THE BAD MESSAGES : ");
-               logMgr.logMessage(errorMessages);
-               logMgr.logMessage("****************** END OF THE BAD MESSAGES *****");
-            }
-            
-         }else if(!mKeyboard->isKeyDown(OIS::KC_R))
-         {
-            firstR = 0.0;
-         }
 
 		return ExampleFrameListener::frameStarted(evt);
 	}
@@ -106,9 +70,6 @@ public:
 		gFileWatcher = new FW::FileWatcher();
 		// add a watch to the system
 		gWatchID = gFileWatcher->addWatch("..\\media", new TextureReloader());
-
-		// create the helper
-		gHelper = new ResourceGroupHelper();
 	}
 
 	~FWTestApplication()
