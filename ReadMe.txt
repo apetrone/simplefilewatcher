@@ -24,8 +24,13 @@ and will update the texture in the demo.
 
 Linux/OSX:
 
-Should just be able to use the Makefile to build the demo.
+Should just be able to use the Makefile to build the demo. Sorry, but I
+haven't had time to port the Ogre demo, though it should port easily enough.
 
 
+------------------------------
 Written by James Wynn
 Contact: james@jameswynn.com
+
+The most recent version can be located at:
+http://simplefilewatcher.googlecode.com
