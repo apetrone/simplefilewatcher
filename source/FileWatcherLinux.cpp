@@ -77,8 +77,13 @@ namespace FW
 			IN_CLOSE_WRITE | IN_MOVED_TO | IN_CREATE | IN_MOVED_FROM | IN_DELETE);
 		if (wd < 0)
 		{
-			fprintf (stderr, "Error: %s\n", strerror(errno));
-			return -1;
+			if(errno == ENOENT)
+				throw FileNotFoundException(directory);
+			else
+				throw Exception(strerror(errno));
+
+//			fprintf (stderr, "Error: %s\n", strerror(errno));
+//			return -1;
 		}
 		
 		WatchStruct* pWatch = new WatchStruct();

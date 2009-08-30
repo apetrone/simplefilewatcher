@@ -190,6 +190,9 @@ namespace FW
 		WatchStruct* watch = CreateWatch(directory.c_str(),
 			FILE_NOTIFY_CHANGE_CREATION | FILE_NOTIFY_CHANGE_SIZE | FILE_NOTIFY_CHANGE_FILE_NAME);
 
+		if(!watch)
+			throw FileNotFoundException(directory);
+
 		watch->mWatchid = watchid;
 		watch->mFileWatcher = this;
 		watch->mFileWatchListener = watcher;

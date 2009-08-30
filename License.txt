@@ -1,4 +1,4 @@
--- FileWatcher License --
+-- SimpleFileWatcher License --
 The MIT License
 
 Copyright (c) 2009 James Wynn (james@jameswynn.com)

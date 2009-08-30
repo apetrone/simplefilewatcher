@@ -58,6 +58,7 @@ namespace FW
 		virtual ~FileWatcherImpl() {}
 
 		/// Add a directory watch
+		/// @exception FileNotFoundException Thrown when the requested directory does not exist
 		virtual WatchID addWatch(const String& directory, FileWatchListener* watcher) = 0;
 
 		/// Remove a directory watch. This is a brute force lazy search O(nlogn).

@@ -4,15 +4,30 @@
 
 	@author James Wynn
 	@date 2/25/2009
+
+	Copyright (c) 2009 James Wynn (james@jameswynn.com)
+
+	Permission is hereby granted, free of charge, to any person obtaining a copy
+	of this software and associated documentation files (the "Software"), to deal
+	in the Software without restriction, including without limitation the rights
+	to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+	copies of the Software, and to permit persons to whom the Software is
+	furnished to do so, subject to the following conditions:
+
+	The above copyright notice and this permission notice shall be included in
+	all copies or substantial portions of the Software.
+
+	THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+	IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+	FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+	AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+	LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+	OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+	THE SOFTWARE.
 */
 
 #include <FileWatcher/FileWatcher.h>
 #include <iostream>
-
-// ugly globals for demo
-FW::FileWatcher* gFileWatcher = 0;
-FW::WatchID gWatchID = 0;
-
 
 /// Processes a file action
 class UpdateListener : public FW::FileWatchListener
@@ -31,19 +46,15 @@ int main(int argc, char **argv)
 {
 	try 
 	{
-		std::cin.get();
 		// create the file watcher object
-		gFileWatcher = new FW::FileWatcher();
+		FW::FileWatcher fileWatcher;
 		// add a watch to the system
-		gWatchID = gFileWatcher->addWatch("./test", new UpdateListener());
-		//gWatchID = gFileWatcher->addWatch("./build", new UpdateListener());
+		FW::WatchID gWatchID = fileWatcher.addWatch("./test", new UpdateListener());
 		
 		while(1)
 		{
-			gFileWatcher->update();
+			fileWatcher.update();
 		}
-		
-		delete gFileWatcher;
 	} 
 	catch( std::exception& e ) 
 	{

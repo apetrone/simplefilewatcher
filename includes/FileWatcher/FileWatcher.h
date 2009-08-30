@@ -43,6 +43,30 @@ namespace FW
 	class FileWatcherImpl;
 	class FileWatchListener;
 
+	/// Base exception class
+	/// @class Exception
+	class Exception : public std::runtime_error
+	{
+	public:
+		Exception(const String& message)
+			: std::runtime_error(message)
+		{}
+	};
+
+	/// Exception thrown when a file is not found.
+	/// @class FileNotFoundException
+	class FileNotFoundException : public Exception
+	{
+	public:
+		FileNotFoundException()
+			: Exception("File not found")
+		{}
+
+		FileNotFoundException(const String& filename)
+			: Exception("File not found (" + filename + ")")
+		{}
+	};
+
 	/// Listens to files and directories and dispatches events
 	/// to notify the parent program of the changes.
 	/// @class FileWatcher
@@ -74,6 +98,7 @@ namespace FW
 		virtual ~FileWatcher();
 
 		/// Add a directory watch
+		/// @exception FileNotFoundException Thrown when the requested directory does not exist
 		WatchID addWatch(const String& directory, FileWatchListener* watcher);
 
 		/// Remove a directory watch. This is a brute force search O(nlogn).

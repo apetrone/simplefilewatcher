@@ -37,11 +37,7 @@
 
 namespace FW
 {
-
-	// forward decl
-	struct WatchStruct;
-
-	///
+	/// Implementation for Linux based on inotify.
 	/// @class FileWatcherLinux
 	class FileWatcherLinux
 	{
@@ -59,6 +55,7 @@ namespace FW
 		virtual ~FileWatcherLinux();
 
 		/// Add a directory watch
+		/// @exception FileNotFoundException Thrown when the requested directory does not exist
 		WatchID addWatch(const String& directory, FileWatchListener* watcher);
 
 		/// Remove a directory watch. This is a brute force lazy search O(nlogn).

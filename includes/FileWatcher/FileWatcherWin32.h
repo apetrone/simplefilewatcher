@@ -37,10 +37,7 @@
 
 namespace FW
 {
-	// forward decl
-	struct WatchStruct;
-
-	///
+	/// Implementation for Win32 based on ReadDirectoryChangesW.
 	/// @class FileWatcherWin32
 	class FileWatcherWin32 : public FileWatcherImpl
 	{
@@ -58,6 +55,7 @@ namespace FW
 		virtual ~FileWatcherWin32();
 
 		/// Add a directory watch
+		/// @exception FileNotFoundException Thrown when the requested directory does not exist
 		WatchID addWatch(const String& directory, FileWatchListener* watcher);
 
 		/// Remove a directory watch. This is a brute force lazy search O(nlogn).
