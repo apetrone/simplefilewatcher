@@ -166,17 +166,17 @@ namespace FW
 		if(IN_CLOSE_WRITE & action)
 		{
 			watch->mListener->handleFileAction(watch->mWatchID, watch->mDirName, filename,
-								FileWatcher::ACTION_MODIFIED);
+								Actions::Modified);
 		}
 		if(IN_MOVED_TO & action || IN_CREATE & action)
 		{
 			watch->mListener->handleFileAction(watch->mWatchID, watch->mDirName, filename,
-								FileWatcher::ACTION_ADD);
+								Actions::Add);
 		}
 		if(IN_MOVED_FROM & action || IN_DELETE & action)
 		{
 			watch->mListener->handleFileAction(watch->mWatchID, watch->mDirName, filename,
-								FileWatcher::ACTION_DELETE);
+								Actions::Delete);
 		}
 	}
 

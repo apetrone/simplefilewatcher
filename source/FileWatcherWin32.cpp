@@ -87,11 +87,6 @@ namespace FW
 				}
 #			endif
 
-/*
-				FileWatcherWin32* fwatcher = static_cast<FileWatcherWin32*>(pWatch-mFileWatcher);
-				pWatch->mFileWatcher->handleAction(pWatch, szFile, pNotify->Action);
-
-*/
 				pWatch->mFileWatcher->handleAction(pWatch, szFile, pNotify->Action);
 
 			} while (pNotify->NextEntryOffset != 0);
@@ -139,12 +134,13 @@ namespace FW
 		size_t ptrsize = sizeof(*pWatch);
 		pWatch = static_cast<WatchStruct*>(HeapAlloc(GetProcessHeap(), HEAP_ZERO_MEMORY, ptrsize));
 
-		pWatch->mDirHandle = CreateFile(szDirectory, FILE_LIST_DIRECTORY, FILE_SHARE_READ | FILE_SHARE_WRITE | FILE_SHARE_DELETE,
-			NULL, OPEN_EXISTING, FILE_FLAG_BACKUP_SEMANTICS | FILE_FLAG_OVERLAPPED, NULL);
+		pWatch->mDirHandle = CreateFile(szDirectory, FILE_LIST_DIRECTORY,
+			FILE_SHARE_READ | FILE_SHARE_WRITE | FILE_SHARE_DELETE, NULL, 
+			OPEN_EXISTING, FILE_FLAG_BACKUP_SEMANTICS | FILE_FLAG_OVERLAPPED, NULL);
 
 		if (pWatch->mDirHandle != INVALID_HANDLE_VALUE)
 		{
-			pWatch->mOverlapped.hEvent    = CreateEvent(NULL, TRUE, FALSE, NULL);
+			pWatch->mOverlapped.hEvent = CreateEvent(NULL, TRUE, FALSE, NULL);
 			pWatch->mNotifyFilter = mNotifyFilter;
 
 			if (RefreshWatch(pWatch))
@@ -242,20 +238,20 @@ namespace FW
 	//--------
 	void FileWatcherWin32::handleAction(WatchStruct* watch, const String& filename, unsigned long action)
 	{
-		FileWatcher::Action fwAction;
+		Action fwAction;
 
 		switch(action)
 		{
 		case FILE_ACTION_RENAMED_NEW_NAME:
 		case FILE_ACTION_ADDED:
-			fwAction = FileWatcher::ACTION_ADD;
+			fwAction = Actions::Add;
 			break;
 		case FILE_ACTION_RENAMED_OLD_NAME:
 		case FILE_ACTION_REMOVED:
-			fwAction = FileWatcher::ACTION_DELETE;
+			fwAction = Actions::Delete;
 			break;
 		case FILE_ACTION_MODIFIED:
-			fwAction = FileWatcher::ACTION_MODIFIED;
+			fwAction = Actions::Modified;
 			break;
 		};
 

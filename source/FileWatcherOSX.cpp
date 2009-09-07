@@ -118,7 +118,7 @@ namespace FW
 			
 			// handle action
 			if(imitEvents)
-				handleAction(name, FileWatcher::ACTION_ADD);
+				handleAction(name, Action::Add);
 		}
 		
 		void removeFile(const String& name, bool imitEvents = true)
@@ -148,7 +148,7 @@ namespace FW
 			
 			// handle action
 			if(imitEvents)
-				handleAction(name, FileWatcher::ACTION_DELETE);
+				handleAction(name, Action::Delete);
 		}
 		
 		// called when the directory is actually changed
@@ -188,7 +188,7 @@ namespace FW
 						if(entry->mModifiedTime != timestamp)
 						{
 							entry->mModifiedTime = timestamp;
-							handleAction(entry->mFilename, FileWatcher::ACTION_MODIFIED);
+							handleAction(entry->mFilename, Action::Modified);
 						}
 						ke++;
 					}
@@ -261,10 +261,10 @@ namespace FW
 			for(int i = 0; i < mChangeListCount; ++i)
 			{
 				ke = &mChangeList[i];
-				//handleAction(name, FileWatcher::ACTION_DELETE);
+				//handleAction(name, Action::Delete);
 				EntryStruct* entry = (EntryStruct*)ke->udata;
 				
-				handleAction(entry->mFilename, FileWatcher::ACTION_DELETE);
+				handleAction(entry->mFilename, Action::Delete);
 				
 				// delete
 				close(ke->ident);
@@ -298,7 +298,7 @@ namespace FW
 						if(event.fflags & NOTE_DELETE)
 						{
 							//fprintf(stderr, "File deleted\n");
-							//watch->handleAction(entry->mFilename, FileWatcher::ACTION_DELETE);
+							//watch->handleAction(entry->mFilename, Action::Delete);
 							watch->removeFile(entry->mFilename);
 						}
 						if(event.fflags & NOTE_EXTEND || 
@@ -310,7 +310,7 @@ namespace FW
 							struct stat attrib;
 							stat(entry->mFilename, &attrib);
 							entry->mModifiedTime = attrib.st_mtime;
-							watch->handleAction(entry->mFilename, FileWatcher::ACTION_MODIFIED);
+							watch->handleAction(entry->mFilename, Action::Modified);
 						}
 					}
 					else
@@ -322,22 +322,6 @@ namespace FW
 			}
 		}
 	}
-	
-/*
-	
-	
-	struct kevent change;
-	struct kevent event;
-
-	struct WatchStruct
-	{
-		WatchID mWatchID;
-		String mDirName;
-		DIR* mDir;
-		dirent* mDirEnt;
-		FileWatchListener* mListener;		
-	};
-*/	
 	
 	//--------
 	FileWatcherOSX::FileWatcherOSX()
@@ -410,41 +394,6 @@ namespace FW
 		delete watch;
 		watch = 0;
 	}
-/*
-	//--------
-	void FileWatcherOSX::update()
-	{
-		int nev = 0;
-		
-		while((nev = kevent(mDescriptor, &change, 1, &event, 1, &mTimeOut)) != 0)
-		{
-			if(nev == -1)
-				perror("kevent");
-			else if (nev > 0)
-			{
-				printf("File: ");
-				if(event.udata)
-					printf("%s -- ", (char*)event.udata);
-				else
-					printf("(Dir) ");
-				
-				if(event.fflags & NOTE_DELETE)
-				{
-					printf("Directory deleted\n");
-				}
-				if(event.fflags & NOTE_EXTEND)
-					printf("Extend\n");
-				
-				if(event.fflags & NOTE_WRITE)
-					printf("Write\n");
-				
-				if(event.fflags & NOTE_ATTRIB)
-					printf("Attrib\n");
-			}
-			
-		}
-	}
-*/
 	
 	//--------
 	void FileWatcherOSX::handleAction(WatchStruct* watch, const String& filename, unsigned long action)

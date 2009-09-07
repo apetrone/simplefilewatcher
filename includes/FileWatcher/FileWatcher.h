@@ -67,27 +67,28 @@ namespace FW
 		{}
 	};
 
+	/// Actions to listen for. Rename will send two events, one for
+	/// the deletion of the old file, and one for the creation of the
+	/// new file.
+	namespace Actions
+	{
+		enum Action
+		{
+			/// Sent when a file is created or renamed
+			Add = 1,
+			/// Sent when a file is deleted or renamed
+			Delete = 2,
+			/// Sent when a file is modified
+			Modified = 4
+		};
+	};
+	typedef Actions::Action Action;
+
 	/// Listens to files and directories and dispatches events
 	/// to notify the parent program of the changes.
 	/// @class FileWatcher
 	class FileWatcher
 	{
-	public:
-
-	public:
-		/// Actions to listen for. Rename will send two events, one for
-		/// the deletion of the old file, and one for the creation of the
-		/// new file.
-		enum Action
-		{
-			/// Sent when a file is created or renamed
-			ACTION_ADD = 1,
-			/// Sent when a file is deleted or renamed
-			ACTION_DELETE = 2,
-			/// Sent when a file is modified
-			ACTION_MODIFIED = 4
-		};
-
 	public:
 		///
 		///
@@ -130,7 +131,7 @@ namespace FW
 		/// @param dir The directory
 		/// @param filename The filename that was accessed (not full path)
 		/// @param action Action that was performed
-		virtual void handleFileAction(WatchID watchid, const String& dir, const String& filename, FileWatcher::Action action) = 0;
+		virtual void handleFileAction(WatchID watchid, const String& dir, const String& filename, Action action) = 0;
 
 	};//class FileWatchListener
 
