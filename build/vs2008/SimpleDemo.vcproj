@@ -3,7 +3,7 @@
 	ProjectType="Visual C++"
 	Version="9.00"
 	Name="SimpleDemo"
-	ProjectGUID="{8A505883-E1DD-F046-913F-8EAA924AC2A2}"
+	ProjectGUID="{4F04D280-E89B-B045-A335-9164EC60507D}"
 	RootNamespace="SimpleDemo"
 	Keyword="Win32Proj"
 	>
