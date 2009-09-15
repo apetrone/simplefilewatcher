@@ -28,7 +28,6 @@
 
 #include <FileWatcher/FileWatcher.h>
 #include <iostream>
-#include <conio.h>
 
 /// Processes a file action
 class UpdateListener : public FW::FileWatchListener
@@ -50,24 +49,17 @@ int main(int argc, char **argv)
 		// create the file watcher object
 		FW::FileWatcher fileWatcher;
 
-		// create an instance of UpdateListener on the stack
-		UpdateListener updateListener;
-
 		// add a watch to the system
-		FW::WatchID watchID = fileWatcher.addWatch("./test", &updateListener);
+		FW::WatchID watchID = fileWatcher.addWatch("./test", new UpdateListener());
 		
-		std::cout << "Press <enter> to exit demo" << std::endl;
+		std::cout << "Press ^C to exit demo" << std::endl;
 
 		// loop until a key is pressed
-		while(!_kbhit())
+		while(1)
 		{
 			fileWatcher.update();
 		}
-		std::cin.ignore();
-
-		// now remove the watch, otherwise FileWatcher will mistake updateListener
-		// for something that should be cleaned up.
-		fileWatcher.removeWatch(watchID);
+kj
 	} 
 	catch( std::exception& e ) 
 	{

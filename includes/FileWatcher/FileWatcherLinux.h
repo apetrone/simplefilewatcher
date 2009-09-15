@@ -39,7 +39,7 @@ namespace FW
 {
 	/// Implementation for Linux based on inotify.
 	/// @class FileWatcherLinux
-	class FileWatcherLinux
+	class FileWatcherLinux : public FileWatcherImpl
 	{
 	public:
 		/// type for a map from WatchID to WatchStruct pointer

@@ -39,7 +39,7 @@ namespace FW
 {
 	/// Implementation for OSX based on kqueue.
 	/// @class FileWatcherOSX
-	class FileWatcherOSX
+	class FileWatcherOSX : public FileWatcherImpl
 	{
 	public:
 		/// type for a map from WatchID to WatchStruct pointer

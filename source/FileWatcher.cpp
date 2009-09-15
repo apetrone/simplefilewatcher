@@ -21,6 +21,7 @@
 */
 
 #include <FileWatcher/FileWatcher.h>
+#include <FileWatcher/FileWatcherImpl.h>
 
 #if FILEWATCHER_PLATFORM == FILEWATCHER_PLATFORM_WIN32
 #	include <FileWatcher/FileWatcherWin32.h>
