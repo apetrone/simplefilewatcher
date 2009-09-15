@@ -59,7 +59,6 @@ int main(int argc, char **argv)
 		{
 			fileWatcher.update();
 		}
-kj
 	} 
 	catch( std::exception& e ) 
 	{
