@@ -56,7 +56,7 @@ namespace FW
 #pragma region Internal Functions
 
 	// forward decl
-	bool RefreshWatch(WatchStruct* pWatch);
+	bool RefreshWatch(WatchStruct* pWatch, bool _clear = false);
 
 	/// Unpacks events and passes them to a user defined callback.
 	void CALLBACK WatchCallback(DWORD dwErrorCode, DWORD dwNumberOfBytesTransfered, LPOVERLAPPED lpOverlapped)
@@ -65,6 +65,9 @@ namespace FW
 		PFILE_NOTIFY_INFORMATION pNotify;
 		WatchStruct* pWatch = (WatchStruct*) lpOverlapped;
 		size_t offset = 0;
+
+		if(dwNumberOfBytesTransfered == 0)
+			return;
 
 		if (dwErrorCode == ERROR_SUCCESS)
 		{
@@ -99,11 +102,11 @@ namespace FW
 	}
 
 	/// Refreshes the directory monitoring.
-	bool RefreshWatch(WatchStruct* pWatch)
+	bool RefreshWatch(WatchStruct* pWatch, bool _clear)
 	{
 		return ReadDirectoryChangesW(
 			pWatch->mDirHandle, pWatch->mBuffer, sizeof(pWatch->mBuffer), FALSE,
-			pWatch->mNotifyFilter, NULL, &pWatch->mOverlapped, WatchCallback) != 0;
+			pWatch->mNotifyFilter, NULL, &pWatch->mOverlapped, _clear ? 0 : WatchCallback) != 0;
 	}
 
 	/// Stops monitoring a directory.
@@ -114,6 +117,8 @@ namespace FW
 			pWatch->mStopNow = TRUE;
 
 			CancelIo(pWatch->mDirHandle);
+
+			RefreshWatch(pWatch, true);
 
 			if (!HasOverlappedIoCompleted(&pWatch->mOverlapped))
 			{
