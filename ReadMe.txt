@@ -22,7 +22,15 @@ can be found within the build directory, or can be regenerated using
 premake 4.0.
 
 
-Integration with Ogre3D:
+SimpleDemo:
+
+To run the demo, create a directory relative to the execution directory
+called "test". Start SimpleDemo, then create/change/delete files inside
+"test". If "test" does not exist when SimpleDemo starts, it will throw
+an exception and exit.
+
+
+OgreDemo:
 
 Check the OgreDemo directory for an example integration with Ogre.
 
@@ -32,6 +40,10 @@ Caveats:
 When some programs write data in Win32, they will generate both an Add,
 and a Modify event. This is likely because the program is actually using
 two separate calls to write its data.
+
+Because of the time it takes to write the data to the file, it may be
+necessary in some cases to wait a few milliseconds after the event to be
+able to safely access the file's contents.
 
 
 ------------------------------
