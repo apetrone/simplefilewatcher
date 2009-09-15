@@ -21,15 +21,15 @@ endif
 
 ifeq ($(config),debug)
   OBJDIR     = ../intermediate/Debug
-  TARGETDIR  = ../../bin
-  TARGET     = $(TARGETDIR)/SimpleDemo_d.exe
+  TARGETDIR  = ../bin
+  TARGET     = $(TARGETDIR)/OgreDemo_d.exe
   DEFINES   += -DDEBUG
-  INCLUDES  += -I../../include
+  INCLUDES  += -I../include -I../../include -I../exampleapp
   CPPFLAGS  += -MMD $(DEFINES) $(INCLUDES)
   CFLAGS    += $(CPPFLAGS) $(ARCH) -g
   CXXFLAGS  += $(CFLAGS) 
-  LDFLAGS   += 
-  LIBS      += 
+  LDFLAGS   += -mwindows -L../lib
+  LIBS      += -lOgreMain_d -lOIS_d
   RESFLAGS  += $(DEFINES) $(INCLUDES) 
   LDDEPS    += 
   LINKCMD    = $(CXX) -o $(TARGET) $(LDFLAGS) $(OBJECTS) $(RESOURCES) $(ARCH) $(LIBS)
@@ -43,15 +43,15 @@ endif
 
 ifeq ($(config),release)
   OBJDIR     = ../intermediate/Release
-  TARGETDIR  = ../../bin
-  TARGET     = $(TARGETDIR)/SimpleDemo.exe
+  TARGETDIR  = ../bin
+  TARGET     = $(TARGETDIR)/OgreDemo.exe
   DEFINES   += -DNDEBUG
-  INCLUDES  += -I../../include
+  INCLUDES  += -I../include -I../../include -I../exampleapp
   CPPFLAGS  += -MMD $(DEFINES) $(INCLUDES)
   CFLAGS    += $(CPPFLAGS) $(ARCH) -O2
   CXXFLAGS  += $(CFLAGS) 
-  LDFLAGS   += -s
-  LIBS      += 
+  LDFLAGS   += -s -mwindows -L../lib
+  LIBS      += -lOgreMain -lOIS
   RESFLAGS  += $(DEFINES) $(INCLUDES) 
   LDDEPS    += 
   LINKCMD    = $(CXX) -o $(TARGET) $(LDFLAGS) $(OBJECTS) $(RESOURCES) $(ARCH) $(LIBS)
@@ -68,7 +68,7 @@ OBJECTS := \
 	$(OBJDIR)/FileWatcherLinux.o \
 	$(OBJDIR)/FileWatcherOSX.o \
 	$(OBJDIR)/FileWatcherWin32.o \
-	$(OBJDIR)/SimpleDemo.o \
+	$(OBJDIR)/OgreDemo.o \
 
 RESOURCES := \
 
@@ -85,7 +85,7 @@ endif
 all: $(TARGETDIR) $(OBJDIR) prebuild prelink $(TARGET)
 
 $(TARGET): $(GCH) $(OBJECTS) $(LDDEPS) $(RESOURCES)
-	@echo Linking SimpleDemo
+	@echo Linking OgreDemo
 	$(SILENT) $(LINKCMD)
 	$(POSTBUILDCMDS)
 
@@ -106,7 +106,7 @@ else
 endif
 
 clean:
-	@echo Cleaning SimpleDemo
+	@echo Cleaning OgreDemo
 ifeq (posix,$(SHELLTYPE))
 	$(SILENT) rm -f  $(TARGET)
 	$(SILENT) rm -rf $(OBJDIR)
@@ -139,7 +139,7 @@ $(OBJDIR)/FileWatcherOSX.o: ../../source/FileWatcherOSX.cpp
 $(OBJDIR)/FileWatcherWin32.o: ../../source/FileWatcherWin32.cpp
 	@echo $(notdir $<)
 	$(SILENT) $(CXX) $(CXXFLAGS) -o $@ -c $<
-$(OBJDIR)/SimpleDemo.o: ../../SimpleDemo.cpp
+$(OBJDIR)/OgreDemo.o: ../OgreDemo.cpp
 	@echo $(notdir $<)
 	$(SILENT) $(CXX) $(CXXFLAGS) -o $@ -c $<
 

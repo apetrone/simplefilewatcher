@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="Windows-1252"?>
 <VisualStudioProject
 	ProjectType="Visual C++"
-	Version="8.00"
-	Name="SimpleDemo"
-	ProjectGUID="{1AE3E861-4440-7343-85E2-64F2B5DF3D68}"
-	RootNamespace="SimpleDemo"
+	Version="9.00"
+	Name="OgreDemo"
+	ProjectGUID="{BE72D9A7-F1F0-1948-B5B8-C7BF1EE90E87}"
+	RootNamespace="OgreDemo"
 	Keyword="Win32Proj"
+	TargetFrameworkVersion="0"
 	>
 	<Platforms>
 		<Platform
@@ -17,7 +18,7 @@
 	<Configurations>
 		<Configuration
 			Name="Debug|Win32"
-			OutputDirectory="..\..\bin"
+			OutputDirectory="..\bin"
 			IntermediateDirectory="..\intermediate\Debug"
 			ConfigurationType="1"
 			CharacterSet="2"
@@ -40,16 +41,15 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="..\..\include"
+				AdditionalIncludeDirectories="..\include;..\..\include;..\exampleapp"
 				PreprocessorDefinitions="DEBUG"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="3"
 				EnableFunctionLevelLinking="true"
 				UsePrecompiledHeader="0"
-				WarningLevel="3"
-				Detect64BitPortabilityProblems="true"
 				ProgramDataBaseFileName="$(OutDir)\$(ProjectName).pdb"
+				WarningLevel="3"
 				DebugInformationFormat="4"
 			/>
 			<Tool
@@ -58,19 +58,20 @@
 			<Tool
 				Name="VCResourceCompilerTool"
 				PreprocessorDefinitions="DEBUG"
-				AdditionalIncludeDirectories="..\..\include"
+				AdditionalIncludeDirectories="..\include;..\..\include;..\exampleapp"
 			/>
 			<Tool
 				Name="VCPreLinkEventTool"
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				OutputFile="$(OutDir)\SimpleDemo_d.exe"
+				AdditionalDependencies="OgreMain_d.lib OIS_d.lib"
+				OutputFile="$(OutDir)\OgreDemo_d.exe"
 				LinkIncremental="2"
-				AdditionalLibraryDirectories=""
+				AdditionalLibraryDirectories="..\lib"
 				GenerateDebugInformation="true"
 				ProgramDatabaseFile="$(OutDir)\$(ProjectName).pdb"
-				SubSystem="1"
+				SubSystem="2"
 				EntryPointSymbol="mainCRTStartup"
 				TargetMachine="1"
 			/>
@@ -93,15 +94,12 @@
 				Name="VCAppVerifierTool"
 			/>
 			<Tool
-				Name="VCWebDeploymentTool"
-			/>
-			<Tool
 				Name="VCPostBuildEventTool"
 			/>
 		</Configuration>
 		<Configuration
 			Name="Release|Win32"
-			OutputDirectory="..\..\bin"
+			OutputDirectory="..\bin"
 			IntermediateDirectory="..\intermediate\Release"
 			ConfigurationType="1"
 			CharacterSet="2"
@@ -124,15 +122,14 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="3"
-				AdditionalIncludeDirectories="..\..\include"
+				AdditionalIncludeDirectories="..\include;..\..\include;..\exampleapp"
 				PreprocessorDefinitions="NDEBUG"
 				StringPooling="true"
 				RuntimeLibrary="2"
 				EnableFunctionLevelLinking="true"
 				UsePrecompiledHeader="0"
-				WarningLevel="3"
-				Detect64BitPortabilityProblems="true"
 				ProgramDataBaseFileName="$(OutDir)\$(ProjectName).pdb"
+				WarningLevel="3"
 				DebugInformationFormat="0"
 			/>
 			<Tool
@@ -141,18 +138,19 @@
 			<Tool
 				Name="VCResourceCompilerTool"
 				PreprocessorDefinitions="NDEBUG"
-				AdditionalIncludeDirectories="..\..\include"
+				AdditionalIncludeDirectories="..\include;..\..\include;..\exampleapp"
 			/>
 			<Tool
 				Name="VCPreLinkEventTool"
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				OutputFile="$(OutDir)\SimpleDemo.exe"
+				AdditionalDependencies="OgreMain.lib OIS.lib"
+				OutputFile="$(OutDir)\OgreDemo.exe"
 				LinkIncremental="1"
-				AdditionalLibraryDirectories=""
+				AdditionalLibraryDirectories="..\lib"
 				GenerateDebugInformation="false"
-				SubSystem="1"
+				SubSystem="2"
 				OptimizeReferences="2"
 				EnableCOMDATFolding="2"
 				EntryPointSymbol="mainCRTStartup"
@@ -177,9 +175,6 @@
 				Name="VCAppVerifierTool"
 			/>
 			<Tool
-				Name="VCWebDeploymentTool"
-			/>
-			<Tool
 				Name="VCPostBuildEventTool"
 			/>
 		</Configuration>
@@ -189,7 +184,6 @@
 	<Files>
 		<Filter
 			Name="source"
-			Filter=""
 			>
 			<File
 				RelativePath="..\..\source\FileWatcher.cpp"
@@ -209,7 +203,7 @@
 			</File>
 		</Filter>
 		<File
-			RelativePath="..\..\SimpleDemo.cpp"
+			RelativePath="..\OgreDemo.cpp"
 			>
 		</File>
 	</Files>

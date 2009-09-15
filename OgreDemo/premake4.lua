@@ -6,22 +6,25 @@ solution "OgreDemo"
 
 	-- A project defines one build target
 	project "OgreDemo"
-		kind "ConsoleApp"
+		kind "WindowedApp"
 		language "C++"
 		files { 
 			"../source/*.cpp",
 			"OgreDemo.cpp"
 		}
-		includedirs { "../includes", "exampleapp", "$(OGRE_HOME)" }
+		includedirs { "include", "../include", "exampleapp" }
 		objdir "intermediate"
+		libdirs { "lib" }
 	
 	configuration "Debug"
 		defines { "DEBUG" }
 		flags { "Symbols" }
 		objdir "intermediate/Debug"
 		targetname "OgreDemo_d"
+		links { "OgreMain_d", "OIS_d" }
 
 	configuration "Release"
 		defines { "NDEBUG" }
 		flags { "Optimize" }
 		objdir "intermediate/Release"
+		links { "OgreMain", "OIS" }

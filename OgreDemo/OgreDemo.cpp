@@ -41,7 +41,7 @@ class TextureReloader : public FW::FileWatchListener
 {
 public:
 	TextureReloader() {}
-	void handleFileAction(FW::WatchID watchid, const String& dir, const String& filename, FW::FileWatcher::Action action)
+	void handleFileAction(FW::WatchID watchid, const String& dir, const String& filename, FW::Action action)
 	{
 		// Get the texture with this name (if it exists)
 		Ogre::TexturePtr tex = Ogre::TextureManager::getSingleton().getByName(filename);
@@ -72,7 +72,7 @@ public:
 		gWatchID = gFileWatcher->addWatch("..\\media", new TextureReloader());
 	}
 
-	~FWTestApplication()
+	virtual ~FWTestApplication()
 	{
 		// file watcher releases all watches on cleanup
 		delete gFileWatcher;
@@ -114,14 +114,14 @@ protected:
 
 
 
-#if OGRE_PLATFORM == OGRE_PLATFORM_WIN32
-#define WIN32_LEAN_AND_MEAN
-#include "windows.h"
-
-INT WINAPI WinMain( HINSTANCE hInst, HINSTANCE, LPSTR strCmdLine, INT )
-#else
+//#if OGRE_PLATFORM == OGRE_PLATFORM_WIN32
+//#define WIN32_LEAN_AND_MEAN
+//#include "windows.h"
+//
+//INT WINAPI WinMain( HINSTANCE hInst, HINSTANCE, LPSTR strCmdLine, INT )
+//#else
 int main(int argc, char **argv)
-#endif
+//#endif
 {
 	// Create application object
 	FWTestApplication app;

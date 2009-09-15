@@ -21,8 +21,8 @@ Description: Base class for all the OGRE examples
 #ifndef __ExampleApplication_H__
 #define __ExampleApplication_H__
 
-#include "Ogre.h"
-#include "OgreConfigFile.h"
+#include <Ogre/Ogre.h>
+#include <Ogre/OgreConfigFile.h>
 #include "ExampleFrameListener.h"
 
 #if OGRE_PLATFORM == OGRE_PLATFORM_APPLE
@@ -111,7 +111,11 @@ protected:
 		String pluginsPath;
 		// only use plugins.cfg if not static
 #ifndef OGRE_STATIC_LIB
+	#ifdef _DEBUG
+		pluginsPath = mResourcePath + "plugins_d.cfg";
+	#else
 		pluginsPath = mResourcePath + "plugins.cfg";
+	#endif
 #endif
 		
         mRoot = OGRE_NEW Root(pluginsPath, 

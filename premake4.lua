@@ -12,7 +12,7 @@ solution "SimpleFileWatcher"
 			"source/*.cpp",
 			"SimpleDemo.cpp"
 		}
-		includedirs { "includes" }
+		includedirs { "include" }
 		objdir "intermediate"
 	
 	configuration "Debug"

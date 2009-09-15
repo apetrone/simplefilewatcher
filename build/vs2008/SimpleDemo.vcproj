@@ -3,7 +3,7 @@
 	ProjectType="Visual C++"
 	Version="9.00"
 	Name="SimpleDemo"
-	ProjectGUID="{4F04D280-E89B-B045-A335-9164EC60507D}"
+	ProjectGUID="{3DD41CD8-4B45-9A46-AAC9-460A28949D39}"
 	RootNamespace="SimpleDemo"
 	Keyword="Win32Proj"
 	>
@@ -40,7 +40,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="..\..\includes"
+				AdditionalIncludeDirectories="..\..\include"
 				PreprocessorDefinitions="DEBUG"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
@@ -57,7 +57,7 @@
 			<Tool
 				Name="VCResourceCompilerTool"
 				PreprocessorDefinitions="DEBUG"
-				AdditionalIncludeDirectories="..\..\includes"
+				AdditionalIncludeDirectories="..\..\include"
 			/>
 			<Tool
 				Name="VCPreLinkEventTool"
@@ -123,7 +123,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="3"
-				AdditionalIncludeDirectories="..\..\includes"
+				AdditionalIncludeDirectories="..\..\include"
 				PreprocessorDefinitions="NDEBUG"
 				StringPooling="true"
 				RuntimeLibrary="2"
@@ -139,7 +139,7 @@
 			<Tool
 				Name="VCResourceCompilerTool"
 				PreprocessorDefinitions="NDEBUG"
-				AdditionalIncludeDirectories="..\..\includes"
+				AdditionalIncludeDirectories="..\..\include"
 			/>
 			<Tool
 				Name="VCPreLinkEventTool"
