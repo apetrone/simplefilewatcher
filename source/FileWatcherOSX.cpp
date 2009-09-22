@@ -118,7 +118,7 @@ namespace FW
 			
 			// handle action
 			if(imitEvents)
-				handleAction(name, Action::Add);
+				handleAction(name, Actions::Add);
 		}
 		
 		void removeFile(const String& name, bool imitEvents = true)
@@ -129,7 +129,7 @@ namespace FW
 			target.udata = &tempEntry;
 			KEvent* ke = (KEvent*)bsearch(&target, &mChangeList, mChangeListCount + 1, sizeof(KEvent), comparator);
 			if(!ke)
-				throw FileNotFoundException(directory);
+				throw FileNotFoundException(name);
 
 			tempEntry.mFilename = 0;
 			
@@ -148,7 +148,7 @@ namespace FW
 			
 			// handle action
 			if(imitEvents)
-				handleAction(name, Action::Delete);
+				handleAction(name, Actions::Delete);
 		}
 		
 		// called when the directory is actually changed
@@ -188,7 +188,7 @@ namespace FW
 						if(entry->mModifiedTime != timestamp)
 						{
 							entry->mModifiedTime = timestamp;
-							handleAction(entry->mFilename, Action::Modified);
+							handleAction(entry->mFilename, Actions::Modified);
 						}
 						ke++;
 					}
@@ -216,7 +216,7 @@ namespace FW
 			closedir(dir);
 		};
 		
-		void handleAction(const String& filename, FileWatcher::Action action)
+		void handleAction(const String& filename, FW::Action action)
 		{
 			mListener->handleFileAction(mWatchID, mDirName, filename, action);
 		}
@@ -235,7 +235,7 @@ namespace FW
 			// scan directory and call addFile(name, false) on each file
 			DIR* dir = opendir(mDirName.c_str());
 			if(!dir)
-				throw FileNotFoundException(directory);
+				throw FileNotFoundException(mDirName);
 			
 			struct dirent* entry;
 			struct stat attrib;
@@ -264,7 +264,7 @@ namespace FW
 				//handleAction(name, Action::Delete);
 				EntryStruct* entry = (EntryStruct*)ke->udata;
 				
-				handleAction(entry->mFilename, Action::Delete);
+				handleAction(entry->mFilename, Actions::Delete);
 				
 				// delete
 				close(ke->ident);
@@ -310,7 +310,7 @@ namespace FW
 							struct stat attrib;
 							stat(entry->mFilename, &attrib);
 							entry->mModifiedTime = attrib.st_mtime;
-							watch->handleAction(entry->mFilename, Action::Modified);
+							watch->handleAction(entry->mFilename, FW::Actions::Modified);
 						}
 					}
 					else
