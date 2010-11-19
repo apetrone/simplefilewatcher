@@ -50,7 +50,7 @@ int main(int argc, char **argv)
 		FW::FileWatcher fileWatcher;
 
 		// add a watch to the system
-		FW::WatchID watchID = fileWatcher.addWatch("./test", new UpdateListener());
+		FW::WatchID watchID = fileWatcher.addWatch("./test", new UpdateListener(), true);
 		
 		std::cout << "Press ^C to exit demo" << std::endl;
 

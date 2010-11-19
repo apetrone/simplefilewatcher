@@ -51,6 +51,7 @@ namespace FW
 		FileWatchListener* mFileWatchListener;
 		char* mDirName;
 		WatchID mWatchid;
+		bool mIsRecursive;
 	};
 
 #pragma region Internal Functions
@@ -105,7 +106,7 @@ namespace FW
 	bool RefreshWatch(WatchStruct* pWatch, bool _clear)
 	{
 		return ReadDirectoryChangesW(
-			pWatch->mDirHandle, pWatch->mBuffer, sizeof(pWatch->mBuffer), FALSE,
+			pWatch->mDirHandle, pWatch->mBuffer, sizeof(pWatch->mBuffer), pWatch->mIsRecursive,
 			pWatch->mNotifyFilter, NULL, &pWatch->mOverlapped, _clear ? 0 : WatchCallback) != 0;
 	}
 
@@ -133,7 +134,7 @@ namespace FW
 	}
 
 	/// Starts monitoring a directory.
-	WatchStruct* CreateWatch(LPCTSTR szDirectory, DWORD mNotifyFilter)
+	WatchStruct* CreateWatch(LPCTSTR szDirectory, bool recursive, DWORD mNotifyFilter)
 	{
 		WatchStruct* pWatch;
 		size_t ptrsize = sizeof(*pWatch);
@@ -147,6 +148,7 @@ namespace FW
 		{
 			pWatch->mOverlapped.hEvent = CreateEvent(NULL, TRUE, FALSE, NULL);
 			pWatch->mNotifyFilter = mNotifyFilter;
+			pWatch->mIsRecursive = recursive;
 
 			if (RefreshWatch(pWatch))
 			{
@@ -184,11 +186,11 @@ namespace FW
 	}
 
 	//--------
-	WatchID FileWatcherWin32::addWatch(const String& directory, FileWatchListener* watcher)
+	WatchID FileWatcherWin32::addWatch(const String& directory, FileWatchListener* watcher, bool recursive)
 	{
 		WatchID watchid = ++mLastWatchID;
 
-		WatchStruct* watch = CreateWatch(directory.c_str(),
+		WatchStruct* watch = CreateWatch(directory.c_str(), recursive,
 			FILE_NOTIFY_CHANGE_CREATION | FILE_NOTIFY_CHANGE_SIZE | FILE_NOTIFY_CHANGE_FILE_NAME);
 
 		if(!watch)

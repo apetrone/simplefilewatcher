@@ -346,7 +346,7 @@ namespace FW
 	}
 
 	//--------
-	WatchID FileWatcherOSX::addWatch(const String& directory, FileWatchListener* watcher)
+	WatchID FileWatcherOSX::addWatch(const String& directory, FileWatchListener* watcher, bool recursive)
 	{
 /*		int fd = open(directory.c_str(), O_RDONLY);
 		if(fd == -1)
