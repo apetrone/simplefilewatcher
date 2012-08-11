@@ -46,8 +46,8 @@ namespace FW
 	
 	struct EntryStruct
 	{
-		EntryStruct(const char* filename, time_t mtime = 0)
-		: mFilename(filename), mModifiedTime(mtime)
+		EntryStruct(const char* filename, FW::WatchID watchid, time_t mtime = 0)
+		: mFilename(filename), mWatchID(watchid), mModifiedTime(mtime)
 		{
 		}
 		~EntryStruct()
@@ -56,6 +56,7 @@ namespace FW
 		}
 		const char* mFilename;
 		time_t mModifiedTime;
+		FW::WatchID mWatchID;
 	};
 	
 	int comparator(const void* ke1, const void* ke2)
@@ -95,7 +96,7 @@ namespace FW
 			struct stat attrib;
 			stat(name.c_str(), &attrib);
 			
-			int fd = open(name.c_str(), O_RDONLY);
+			int fd = open(name.c_str(), O_RDONLY | O_EVTONLY);
 
 			if(fd == -1)
 				throw FileNotFoundException(name);
@@ -105,12 +106,12 @@ namespace FW
 			char* namecopy = new char[name.length() + 1];
 			strncpy(namecopy, name.c_str(), name.length());
 			namecopy[name.length()] = 0;
-			EntryStruct* entry = new EntryStruct(namecopy, attrib.st_mtime);
+			EntryStruct* entry = new EntryStruct(namecopy, mWatchID, attrib.st_mtime);
 			
 			// set the event data at the end of the list
 			EV_SET(&mChangeList[mChangeListCount], fd, EVFILT_VNODE,
-				   EV_ADD | EV_ENABLE | EV_ONESHOT,
-				   NOTE_DELETE | NOTE_EXTEND | NOTE_WRITE | NOTE_ATTRIB,
+				   EV_ADD | EV_ENABLE | EV_ONESHOT/* | EV_CLEAR*/,
+				   NOTE_DELETE | NOTE_EXTEND | NOTE_WRITE | NOTE_ATTRIB | NOTE_RENAME | NOTE_LINK | NOTE_REVOKE,
 				   0, (void*)entry);
 			
 			// qsort
@@ -224,7 +225,7 @@ namespace FW
 		void addAll()
 		{
 			// add base dir
-			int fd = open(mDirName.c_str(), O_RDONLY);
+			int fd = open(mDirName.c_str(), O_RDONLY | O_EVTONLY);
 			EV_SET(&mChangeList[0], fd, EVFILT_VNODE,
 				   EV_ADD | EV_ENABLE | EV_ONESHOT,
 				   NOTE_DELETE | NOTE_EXTEND | NOTE_WRITE | NOTE_ATTRIB,
@@ -288,29 +289,42 @@ namespace FW
 			{
 				if(nev == -1)
 					perror("kevent");
-				else
+				else if ( nev > 0 )
 				{
 					EntryStruct* entry = 0;
 					if((entry = (EntryStruct*)event.udata) != 0)
 					{
-						//fprintf(stderr, "File: %s -- ", (char*)entry->mFilename);
 						
-						if(event.fflags & NOTE_DELETE)
+						// the watchID of the entry doesn't match the watchID of the WatchStruct.
+						// instead, find it in the map and return it here.
+						watch = mWatches[ entry->mWatchID ];
+						if ( !watch )
 						{
-							//fprintf(stderr, "File deleted\n");
-							//watch->handleAction(entry->mFilename, Action::Delete);
-							watch->removeFile(entry->mFilename);
+							//fprintf( stderr, "Unable to find watchID: %u\n", (unsigned int)entry->mWatchID );
+							continue;
 						}
-						if(event.fflags & NOTE_EXTEND || 
-						   event.fflags & NOTE_WRITE ||
-						   event.fflags & NOTE_ATTRIB)
+						
+						if ( event.filter == EVFILT_VNODE )
 						{
-							//fprintf(stderr, "modified\n");
-							//watch->rescan();
-							struct stat attrib;
-							stat(entry->mFilename, &attrib);
-							entry->mModifiedTime = attrib.st_mtime;
-							watch->handleAction(entry->mFilename, FW::Actions::Modified);
+							//fprintf(stderr, "Watch: %u, %u, File: %s -- ", (unsigned int)watch->mWatchID, (unsigned int)entry->mWatchID, (char*)entry->mFilename);
+							if(event.fflags & NOTE_DELETE)
+							{
+								//fprintf(stderr, "File deleted\n");
+								//watch->handleAction(entry->mFilename, FW::Actions::Delete);
+								watch->removeFile(entry->mFilename);
+								watch->rescan();
+							}
+							if(event.fflags & NOTE_EXTEND || 
+							   event.fflags & NOTE_WRITE ||
+							   event.fflags & NOTE_ATTRIB)
+							{
+								//fprintf(stderr, "modified\n");
+								//watch->rescan();
+								struct stat attrib;
+								stat(entry->mFilename, &attrib);
+								entry->mModifiedTime = attrib.st_mtime;
+								watch->handleAction(entry->mFilename, FW::Actions::Modified);
+							}
 						}
 					}
 					else
