@@ -47,11 +47,16 @@ int main(int argc, char **argv)
 {
 	try 
 	{
+		// create the listener (before the file watcher - so it gets destroyed after the file watcher)
+		UpdateListener listener;
+		
 		// create the file watcher object
 		FW::FileWatcher fileWatcher;
 
 		// add a watch to the system
-		FW::WatchID watchID = fileWatcher.addWatch("./test", new UpdateListener(), true);
+		// the file watcher doesn't manage the pointer to the listener - so make sure you don't just
+		// allocate a listener here and expect the file watcher to manage it - there will be a leak!
+		FW::WatchID watchID = fileWatcher.addWatch("./test", &listener, true); 
 		
 		std::cout << "Press ^C to exit demo" << std::endl;
 
