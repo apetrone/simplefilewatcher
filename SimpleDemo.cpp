@@ -28,6 +28,7 @@
 
 #include <FileWatcher/FileWatcher.h>
 #include <iostream>
+#include <stdio.h>
 
 /// Processes a file action
 class UpdateListener : public FW::FileWatchListener
