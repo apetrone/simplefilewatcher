@@ -35,8 +35,14 @@
 
 namespace FW
 {
+#if UNICODE
+	/// Type for a string
+	typedef std::wstring String;
+#else
 	/// Type for a string
 	typedef std::string String;
+#endif
+
 	/// Type for a watch id
 	typedef unsigned long WatchID;
 
@@ -49,7 +55,7 @@ namespace FW
 	class Exception : public std::runtime_error
 	{
 	public:
-		Exception(const String& message)
+		Exception(const std::string& message)
 			: std::runtime_error(message)
 		{}
 	};
@@ -64,7 +70,7 @@ namespace FW
 		{}
 
 		FileNotFoundException(const String& filename)
-			: Exception("File not found (" + filename + ")")
+			: Exception("File not found (" + std::string(filename.begin(), filename.end()) + ")")
 		{}
 	};
 
